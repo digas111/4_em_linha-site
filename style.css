@@ -1,0 +1,11 @@
+h1.title {
+color: red;
+text-decoration: underline;
+position: center;
+}
+
+#bar {
+  width: 100%;
+  height: auto;
+  background-color: red;
+}
