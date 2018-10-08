@@ -1,11 +1,51 @@
 h1.title {
-color: red;
+color: #BC4123;
 text-decoration: underline;
-position: center;
+/* position: relative; */
 }
 
-#bar {
+#top_bar {
+  width:100%;
+  height:7%;
+  position: fixed;
+  top: 0em;
+  right: 0em;
+  left: 0em;
+  text-align: center;
+  background-color: #BC4123;
+}
+
+#top_bar_wrapper {
+  height: 7%;
+}
+
+#container {
+  width:90%;
+  height: 90%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:auto;
+  margin-bottom:auto;
+  background-color: aliceblue;
+}
+
+#side_bar {
+  width: 22%;
+  height: 100%;
+  background-color: blue;
+  float: left;
+}
+
+#game {
+  width: 78%;
+  height: 100%;
+  background-color: black;
+  float: left;
+  /* position: relative; */
+}
+
+html, body {
+  height: 100%;
   width: 100%;
-  height: auto;
-  background-color: red;
+  background-color: #0B172A;
 }
