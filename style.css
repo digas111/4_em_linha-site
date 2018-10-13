@@ -39,7 +39,11 @@ text-decoration: underline;
 #game {
   width: 78%;
   height: 100%;
-  background-color: black;
+  /* background-color: black; */
+  background-image: url("img/back.jpg");
+  background-repeat: no-repeat, repeat;
+  background-size: cover;
+  background-position: center;
   float: left;
   /* position: relative; */
 }
