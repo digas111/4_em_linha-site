@@ -20,13 +20,20 @@ text-decoration: underline;
 }
 
 #container {
-  width:90%;
-  height: 90%;
+  width: 90vw;
+  height: 52vw;
   margin-left:auto;
   margin-right:auto;
   margin-top:auto;
   margin-bottom:auto;
   background-color: aliceblue;
+  position: relative;
+}
+
+#container:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
 }
 
 #side_bar {
