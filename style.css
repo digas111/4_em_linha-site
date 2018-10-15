@@ -27,13 +27,6 @@ text-decoration: underline;
   margin-top:auto;
   margin-bottom:auto;
   background-color: aliceblue;
-  position: relative;
-}
-
-#container:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
 }
 
 #side_bar {
