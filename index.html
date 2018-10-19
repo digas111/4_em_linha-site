@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <link rel="shortcut icon" href="img/head.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="style.css">
     <title> 4 em ____ </title>
@@ -15,8 +16,38 @@
       </div>
     </div>
     <div id="container">
-      <div id="side_bar">
 
+      <div id="side_bar">
+        <h1>Bem-vindo ao 4 em linha!</h1>
+        Nome: <input type="text" name="user">
+        <br>
+        Palavra-passe: <input type="text" name="password">
+        <br> <br>
+        <input type="submit" value="Entrar">
+        <br>
+        <p>Regras:</p>
+        <ul>
+          <div class="tooltip">
+            <li>Posição inicial e Objetivo
+              <span class="tooltiptext">O 4 em linha pertence a uma série de jogos populares pois facilmente se aprendem as suas regras simples e o jogo consegue entreter os jogadores durante bastante tempo. O objectivo deste jogo é colocar quatro peças numa linha contínua vertical, horizontal ou diagonalmente.
+              </span>
+            </li>
+          </div>
+          <div class="tooltip">
+            <li>Como jogar as peças
+              <span class="tooltiptext">Ambos os jogadores jogam as suas peças no tabuleiro, uma peça por jogada. A regra é que a peça "caia" sempre. Quer dizer que a peça deve sempre ser jogada ou na linha do fundo ou sobre uma peça já colocada.
+              </span>
+            </li>
+          </div>
+          <div class="tooltip">
+            <li>Como terminar o jogo
+              <span class="tooltiptext">Um dos jogadores coloca quatro ou mais peças numa linha contínua vertical, horizontal ou diagonalmente. Este jogador vence o jogo. OU: No caso de todas as casas do tabuleiro resulta em empate.
+              </span>
+            </li>
+          </div>
+        </ul>
+        <br>
+        <input type="submit" id="jogarButton" value="Jogar!">
       </div>
       <div id="game">
         <!-- <div id="left_game_spacer"></div> -->
