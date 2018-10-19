@@ -41,11 +41,8 @@ text-decoration: underline;
 #container {
   width: 90vw;
   height: 50vw;
-<<<<<<< HEAD
   max-height: 90%;
-=======
   max-height:90%;
->>>>>>> 2a63f22c82c25f1ca1a3414ff0f364fa236ad424
   margin-left:auto;
   margin-right:auto;
   margin-top:auto;
