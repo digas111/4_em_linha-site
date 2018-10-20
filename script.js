@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="style.css"></link>
+
 var gameActive = false; //know if the game is active
 var activePlayer = 0; //know who is playing
 var boardWidth = 7;
@@ -6,23 +8,30 @@ var gameBoard = [boardWidth][boardHeight];
 
 function drawBoard() {
 
-  for (var col=0; col<)
-
-
-
-  for (var row=0; row<=7; row++) {
-    /*document.writeln() function will write HTML code to the browser.  If you "inspect" this page after the browser has
-    rendered the page, you will see a bunch of HTML
-    write the start of the table row tag
-    */
-    document.writeln("<tr>");
-    for (var col=0; col<=9; col++) {
-      //write each table data element - with the row and col variables in the ID so it can be accessed later.
-      document.writeln("<td id='square_" + row + "_"+ col +"' class='board_square'></td>");
+  for (var col=0; col<7; col++) {
+    document.writeln("<div id="column" class="border">");
+    for(var row=0; row<6; row++) {
+      document.writeln("<div id="empty">
+      </div>");
     }
-    //write the closing table row tag.
-    document.writeln("</tr>");
+    document.writeln("</div>");
   }
+
+
+
+  // for (var row=0; row<=7; row++) {
+  //   /*document.writeln() function will write HTML code to the browser.  If you "inspect" this page after the browser has
+  //   rendered the page, you will see a bunch of HTML
+  //   write the start of the table row tag
+  //   */
+  //   document.writeln("<tr>");
+  //   for (var col=0; col<=9; col++) {
+  //     //write each table data element - with the row and col variables in the ID so it can be accessed later.
+  //     document.writeln("<td id='square_" + row + "_"+ col +"' class='board_square'></td>");
+  //   }
+  //   //write the closing table row tag.
+  //   document.writeln("</tr>");
+  // }
 }
 
 
