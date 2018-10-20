@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="style.css"></link>
+//<link rel="stylesheet" href="style.css"></link>
 
 var gameActive = false; //know if the game is active
 var activePlayer = 0; //know who is playing
@@ -8,13 +8,24 @@ var gameBoard = [boardWidth][boardHeight];
 
 function drawBoard() {
 
-  for (var col=0; col<7; col++) {
-    document.writeln("<div id="column" class="border">");
-    for(var row=0; row<6; row++) {
-      document.writeln("<div id="empty">
-      </div>");
+  for (var i=0; i<7; i++) {
+    var col = document.createElement("div");
+    col.classList.add("column");
+    col.id = i;
+    var game = document.getElementById("game");
+    game.appendChild(col);
+
+    for (var j=0; j<6; j++) {
+      var piece = document.createElement("div");
+      piece.classList.add("player_2");
+      piece.id = i + "_" + j;
+      col.appendChild(piece);
     }
-    document.writeln("</div>");
+    
+    // for(var row=0; row<6; row++) {
+    //   var piece = document.createElement("div");
+    //   col.className = "empty";
+    // }
   }
 
 

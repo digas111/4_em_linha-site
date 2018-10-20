@@ -56,33 +56,25 @@ text-decoration: underline;
 }
 
 
-#column {
-  width:10vw;
+.column {
+  width: 10vw;
   height: 100%;
   float: left;
-  /* display: inline-block; */
   background: rgba(0, 0, 0, 0.5);
-  /* border-right-style: solid;
-  border-right-width: 0.5px;
-  border-right-color: #BC4123; */
   text-align: center;
-  
-
-}
-.border {
   border-right-style: solid;
   border-right-width: 0.025vw;
   border-right-color: #BC4123;
 }
 
-#empty {
+.empty {
   height: 0;
   width: 84%;
   padding-bottom: 84%;
   /* float: left; */
   display: inline-block;
 }
-#player_2 {
+.player_2 {
   height: 0;
   width: 84%;
   padding-bottom: 84%;
@@ -94,7 +86,7 @@ text-decoration: underline;
   display: inline-block;
 }
 
-#player_1 {
+.player_1 {
   height: 0;
   width: 84%;
   padding-bottom: 84%;
