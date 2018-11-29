@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
   <head>
     <meta charset="utf-8"/>
     <link rel="shortcut icon" href="img/head.ico" type="image/x-icon"/>
@@ -11,145 +11,149 @@
 
   <body>
     <div id="top_bar_wrapper">
-      <div id="top_bar">
-        <h1>Bem-vindo ao 4 em linha!</h1>
-      </div>
+        <div id="top_bar">
+            <h1>Bem-vindo ao 4 em linha!</h1>
+          <div class="topbarText">  Nome: <input type="text" class="inputStuff" name="user" placeholder="nome">  Palavra-passe: <input type="text" class="inputStuff" name="password" placeholder="palavra-passe">
+              <input type="submit" id="entrarButton" value="Entrar">
+          </div>
+          </div>
     </div>
     <div id="container">
-      <div id="side_bar">
-        <p>Nome:</p> <input type="text" name="user">
-        <br>
-        Palavra-passe: <input type="text" name="password">
-        <br>  <br>
-        <input type="submit" value="Entrar">
-        <br>
-        <p>Regras:</p>
-        <ul>
-          <div class="tooltip">
-            <li>Posição inicial e Objetivo
-              <span class="tooltiptext">O 4 em linha pertence a uma série de jogos populares pois facilmente se aprendem as suas regras simples e o jogo consegue entreter os jogadores durante bastante tempo. O objectivo deste jogo é colocar quatro peças numa linha contínua vertical, horizontal ou diagonalmente.
-              </span>
-            </li>
+        <div id="side_bar">
+            <p>Regras:</p>
+              <div class="tooltip">
+                Posição inicial e Objetivo
+                  <span class="tooltiptext">O 4 em linha pertence a uma série de jogos populares pois facilmente se aprendem as suas regras simples e o jogo consegue entreter os jogadores durante bastante tempo. O objectivo deste jogo é colocar quatro peças numa linha contínua vertical, horizontal ou diagonalmente.
+                  </span>
+              </div>
+              <br>
+              <div class="tooltip">
+                Como jogar as peças
+                  <span class="tooltiptext">Ambos os jogadores jogam as suas peças no tabuleiro, uma peça por jogada. A regra é que a peça "caia" sempre. Quer dizer que a peça deve sempre ser jogada ou na linha do fundo ou sobre uma peça já colocada.
+                  </span>
+              </div>
+              <br>
+              <div class="tooltip">
+                Como terminar o jogo
+                  <span class="tooltiptext">Um dos jogadores coloca quatro ou mais peças numa linha contínua vertical, horizontal ou diagonalmente. Este jogador vence o jogo. OU: No caso de todas as casas do tabuleiro resulta em empate.
+                  </span>
+              </div>
+              <div class="OFFON">
+                <div id="leftTextOFFON0">
+                  <p>Tabuleiro:</p>
+                </div>
+                <div id="rightTextOFFON0">
+                  <div id="insideDiv0">
+                    <form>
+                      <select id="tamanhoTabuleiro" name="tamanhoTabuleiro">
+                        <option value="1">Pequeno(6x5)</option>
+                        <option value="2" selected>Médio(7x6)</option>
+                        <option value="3">Grande(8x7)</option>
+                      </select>
+                   </form>
+                  </div>
+                </div>
+              </div>
+    
+            <div class="OFFON">
+              <div class="leftTextOFFON">
+                <p>Contra computador:</p>
+              </div>
+              <div class="rightTextOFFON">
+                <div class="insideDiv">
+                  <label class="switch">
+                    <input type="checkbox" id="vs_pc" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="OFFON">
+              <div class="leftTextOFFON">
+                <p>Queres ser o primeiro?</p>
+              </div>
+              <div class="rightTextOFFON">
+                <div class="insideDiv">
+                  <label class="switch">
+                    <input type="checkbox" id="first">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="OFFON">
+              <div class="leftTextOFFON">
+                <p>Dificuldade:</p>
+              </div>
+                <div class="rightTextOFFON">
+                  <div class="insideDiv">
+                    <form>
+                      <select id="dificuldade" name="dificuldade">
+                        <option value="facil">Fácil</option>
+                        <option value="medio">Médio</option>
+                        <option value="dificil">Difícil</option>
+                      </select>
+                   </form>
+                  </div>
+              </div>
+            </div>
+            <div class="OFFON" id="player">
+              <div class="leftTextOFFON">
+                <p>Jogada atual:</p>
+              </div>
+              <!-- <div class="rightTextOFFON" id="colorPlayer">
+                <p id="activePlayer">Player 1</p>
+              </div> -->
+            </div>
+            <br>
+            <div id="botoesWrapper">
+              <button id ="playButton" onClick="startGame()">Jogar!</button>
+              <br>
+              <button onClick="giveUp()">Desistir</button>
+              <br>
+              <button onClick="classificacoes()">Classificações</button>
+            </div>
           </div>
-          <div class="tooltip">
-            <li>Como jogar as peças
-              <span class="tooltiptext">Ambos os jogadores jogam as suas peças no tabuleiro, uma peça por jogada. A regra é que a peça "caia" sempre. Quer dizer que a peça deve sempre ser jogada ou na linha do fundo ou sobre uma peça já colocada.
-              </span>
-            </li>
-          </div>
-          <div class="tooltip">
-            <li>Como terminar o jogo
-              <span class="tooltiptext">Um dos jogadores coloca quatro ou mais peças numa linha contínua vertical, horizontal ou diagonalmente. Este jogador vence o jogo. OU: No caso de todas as casas do tabuleiro resulta em empate.
-              </span>
-            </li>
-          </div>
-        </ul>
-        <br>
-        <input type="submit" id="jogarButton" value="Jogar!">
-      </div>
       <div id="game">
-        <script> drawBoard();</script>
-        <!-- <div id="left_game_spacer"></div> -->
-          <!-- <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="player_1">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="player_2">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div>
-          <div id="column" class="border">
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-            <div id="empty">
-            </div>
-          </div> -->
+        <!-- <script> startGame();</script> -->
+        
       </div>
     </div>
+
+    <div id="container2">
+        <h2>Classificações</h2>
+        <div id="classificacoes">
+          <table>
+            <tr>
+              <th>Vencedor</th>
+              <th>Derrotado</th>
+              <th>Pontos</th>
+            </tr>
+            <tr>
+              <td>Peter</td>
+              <td>Computador</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>Lois</td>
+              <td>Computador</td>
+              <td>150</td>
+            </tr>
+            <tr>
+              <td>Joe</td>
+              <td>Computador</td>
+              <td>300</td>
+            </tr>
+            <tr>
+              <td>Cleveland</td>
+              <td>Lois</td>
+              <td>250</td>
+            </tr>
+          </table>
+        </div>
+      </div>
 
   </body>
 
