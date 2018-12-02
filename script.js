@@ -299,7 +299,7 @@ function aux_ranking(response) {
   container2.appendChild(title);
   container2.appendChild(classificacoes);
 
-  var maxcontainer = document.getElementById("max_container");
+  let maxcontainer = document.getElementById("max_container");
 
   maxcontainer.appendChild(container2);
 
@@ -983,58 +983,25 @@ function printPlayer(player) {
 
 function classificacoes() {
 
+  if (document.getElementById("container2") != null) {
+    let container2 = document.getElementById("container2");
+    document.getElementById("max_container").removeChild(container2);
+    let body = document.getElementsByTagName("BODY")[0];
+    body.style.overflow = "hidden";
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    return;
+  }
+
+  var body = document.getElementsByTagName("BODY")[0];
+  body.style.overflow = "auto";
+
   if (online) {
     ranking();
   }
   else {
     ////
   }
-
-  // var body = document.getElementsByTagName("BODY");
-
-  // if (rankingResult == null) {
-
-  //   console.log("Ainda não há ranking");
-  //   return;
-
-  // }
-
-  // var container2 = document.createElement("div");
-  // container2.id = "container2";
-
-  // var title = document.createElement("h2");
-  // title.innerHTML = "Classificações";
-
-  // var classificacoes = document.createElement("div");
-  // classificacoes.id = classificacoes;
-
-  // var printclass = "<table>" +
-  //   "<tr>" +
-  //   "<th>Jogador<th>" +
-  //   "<th>Vitorias/Jogos</th>" +
-  //   "</tr>";
-
-  // for (let i=0; i < rankingResult.length; i++) {
-
-  //   printclass +=
-  //     "<tr>" +
-  //     "<td>" + printclass[i].nick + "</td>" +
-  //     "<td>" + printclass[i].victories + "</td>" +
-  //     "<td>" + printclass[i].games + "</td>" +
-  //     "</tr>";
-
-  // }
-
-  // closeRanking = "</table>";
-
-  // classificacoes.innerHTML = printclass + closeRanking;
-
-  // container2.appendChild(title);
-  // container2.appendChild(classificacoes);
-
-  // document.body.appendChild(container2);
-
-  
 
 }
 

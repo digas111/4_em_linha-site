@@ -179,8 +179,6 @@ html, body {
   background-color: #0d193b;
 }
 
-
-
 .tooltiptext {
     visibility: hidden;
     width: 400px;
@@ -396,16 +394,14 @@ margin-right:auto;
 margin-top:auto;
 margin-bottom:auto;
 min-width:90%;
-display:block;
+/* position: relative; */
+/* display:block; */
 }
-
-
 
 h2 {
 color: #C36900;
 text-shadow: 1px 1px #AF5500;
 text-align:center;
-
 }
 
 table {
