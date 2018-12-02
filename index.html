@@ -12,7 +12,7 @@
 <body>
   <div id="top_bar_wrapper">
     <div id="top_bar">
-      <h1>Bem-vindo ao 4 em linha!</h1>
+      <h1 onclick="toggleSnow()">Bem-vindo ao 4 em linha!</h1>
       <div id="topbarText">
         Nome: <input type="text" id="username">
         Palavra-passe: <input type="password" id="pw">
@@ -79,7 +79,6 @@
         </div>
         <br>
         <div id="keepSpace">
-
         </div>
         <div class="OFFON" id="player">
           <div class="leftTextOFFON">
@@ -98,8 +97,8 @@
       </div>
 
     </div>
-    <div class="background">
-      <canvas id='canv'></canvas>
+    <div id="background">
+      <!-- <canvas id="canv"></canvas> -->
     </div>
   </div>
   <script src="index.js"></script>
