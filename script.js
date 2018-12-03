@@ -10,6 +10,7 @@ notmypiece = 2;
 
 var online = true;
 var bot = "PC";
+var login = false;
 
 var rankingHeight;
 var rankingWidth;
@@ -49,6 +50,10 @@ function register() {
   username = document.getElementById("username").value;
   password = document.getElementById("pw").value;
 
+  if (username == "" || password == "") {
+    return false;
+  }
+
   user = {"nick": username, "pass": password};
 
   fetch(server + "register", {
@@ -75,10 +80,24 @@ function aux_register(response) {
     var usr = document.createTextNode(username);
 
     loginBox.appendChild(usr);
+
+    login = true;
+  
   }
 
   else {
+
     console.log("Deu asneira");
+
+    var splash = document.createElement("div");
+    splash.classList.add("finish");
+    splash.innerHTML = "<h3>Palavra-pass incorreta!</h3>";
+    var window = document.getElementById("game");
+    window.appendChild(splash);
+
+    setTimeout(function(){window.removeChild(splash)},2000);
+
+
   }
 
 }
@@ -278,7 +297,7 @@ function aux_ranking(response) {
 
   var printclass = "<table>" +
     "<tr>" +
-    "<th>Jogador<th>" +
+    "<th>Jogador</th>" +
     "<th>Vitorias/Jogos</th>" +
     "</tr>";
 
@@ -310,29 +329,62 @@ function aux_ranking(response) {
 /////////////////////////////////////////////////////////////////////////
 
 function showWinner(winner) {
-  
+
+  console.log("show winner");
+
   for (var i = 0; i < game.boardWidth; i++) {
     var col = document.getElementById(i);
     col.onclick = 0;
     col.classList.remove("column");
     col.classList.add("column_no_hover");
   }
-  
+
   var splash = document.createElement("div");
   splash.classList.add("finish");
 
+  if (!online) {
+    var playergames = Number(localStorage.getItem("playergames"));
+    var playerwins = Number(localStorage.getItem("playerwins"));
+    var botgames = Number(localStorage.getItem("botgames"));
+    var botwins = Number(localStorage.getItem("botwins"));
+  }
+
+
   if (winner == user.username) {
     splash.innerHTML = "<h3>Ganhaste!</h3>";
+
+    if (!online) {  
+
+      localStorage.setItem("playerwins",playerwins+1);
+      localStorage.setItem("playergames",playergames+1);
+      localStorage.setItem("botgames",botgames+1);
+     
+    }
   }
 
   else if (winner == null) {
     splash.innerHTML = "<h3>Empate!</h3>";
+
+    if (!online) {
+
+      localStorage.setItem("playergames",playergames+1);
+      localStorage.setItem("botgames",botgames+1);
+      
+    }
   }
 
   else {
-    splash.innerHTML= "<h3>" + winner + " venceu :(</h3>";
+    splash.innerHTML = "<h3>" + winner + " venceu :(</h3>";
+
+    if (!online) {
+
+      localStorage.setItem("botwins",botwins+1);
+      localStorage.setItem("botgames",botgames+1);
+      localStorage.setItem("playergames",playergames+1);
+      
+    }
   }
-  
+
   var board = document.getElementById("game");
   board.appendChild(splash);
 
@@ -342,12 +394,24 @@ function startGame() {
 
   var button = document.getElementById("playButton");
 
+  if (!login && online) {
+
+    var splash = document.createElement("div");
+    splash.classList.add("finish");
+    splash.innerHTML = "<h3>Tem de iniciar sessão primeiro!</h3>";
+    var window = document.getElementById("game");
+    window.appendChild(splash);
+
+    setTimeout(function(){window.removeChild(splash)},2000);
+
+    return;
+
+  }
+
   if (gameActive) {
 
     if (online) {
       leave();
-      deletePlayer();
-      return;
     }
 
     button.innerHTML = "Jogar";
@@ -1000,7 +1064,56 @@ function classificacoes() {
     ranking();
   }
   else {
-    ////
+
+    console.log("boas");
+
+    if (typeof (Storage) != "undefined") {
+
+
+      var container2 = document.createElement("div");
+      container2.id = "container2";
+
+      var title = document.createElement("h2");
+      title.innerHTML = "Classificações";
+
+      var classificacoes = document.createElement("div");
+      classificacoes.id = classificacoes;
+
+      var printclass = "<table>" +
+        "<tr>" +
+        "<th>Jogador</th>" +
+        "<th>Vitorias/Jogos</th>" +
+        "</tr>";
+
+        printclass +=
+          "<tr>" +
+          "<td>" + "User" + "</td>" +
+          "<td>" + localStorage.getItem("playerwins") + " / " + localStorage.getItem("playergames") + "</td>" +
+          "</tr>";
+
+          printclass +=
+          "<tr>" +
+          "<td>" + bot + "</td>" +
+          "<td>" + localStorage.getItem("botwins") + " / " + localStorage.getItem("botgames") + "</td>" +
+          "</tr>";
+
+
+      closeRanking = "</table>";
+
+      classificacoes.innerHTML = printclass + closeRanking;
+
+      container2.appendChild(title);
+      container2.appendChild(classificacoes);
+
+      let maxcontainer = document.getElementById("max_container");
+
+      maxcontainer.appendChild(container2);
+
+
+
+    }
+
+
   }
 
 }
@@ -1015,6 +1128,21 @@ window.onload = function () {
       document.getElementById("login_button").click();
     }
   });
+
+  if (localStorage.getItem("botgames")===null) {
+    localStorage.setItem("botgames",0);
+  }
+  if (localStorage.getItem("botwins")===null) {
+    localStorage.setItem("botwins",0);
+  }
+
+  if (localStorage.getItem("playergames")===null) {
+    localStorage.setItem("playergames",0);
+  }
+  if (localStorage.getItem("playerwins")===null) {
+    localStorage.setItem("playerwins",0);
+  }
+
 
 
   function check() {
