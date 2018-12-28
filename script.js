@@ -21,7 +21,7 @@ var game = new Game(0,0,null,61,null,null);
 var gameActive = false; //know if the game is active
 var activePlayer = 1; //know who is playing
 
-var server = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+var server = "http://twserver.alunos.dcc.fc.up.pt:8161/";
 
 function User(username,password, board_type, group) {
   this.username = username;
@@ -82,7 +82,7 @@ function aux_register(response) {
     loginBox.appendChild(usr);
 
     login = true;
-  
+
   }
 
   else {
@@ -91,7 +91,7 @@ function aux_register(response) {
 
     var splash = document.createElement("div");
     splash.classList.add("finish");
-    splash.innerHTML = "<h3>Palavra-pass incorreta!</h3>";
+    splash.innerHTML = "<h3>Palavra-passe incorreta!</h3>";
     var window = document.getElementById("game");
     window.appendChild(splash);
 
@@ -214,7 +214,7 @@ function update() {
             drawBoard(data.board);
           }
         }
-       
+
       }
 
       showWinner(data.winner);
@@ -235,7 +235,7 @@ function update() {
       }
 
       printPlayer(data.turn);
-      
+
     }
 
     else if (data.board != null) { //se for qualquer outra jogadaany other play (server bugg?)
@@ -251,7 +251,7 @@ function update() {
       printPlayer(data.turn);
     }
   }
-  
+
 }
 
 function ranking() {
@@ -353,12 +353,12 @@ function showWinner(winner) {
   if (winner == user.username) {
     splash.innerHTML = "<h3>Ganhaste!</h3>";
 
-    if (!online) {  
+    if (!online) {
 
       localStorage.setItem("playerwins",playerwins+1);
       localStorage.setItem("playergames",playergames+1);
       localStorage.setItem("botgames",botgames+1);
-     
+
     }
   }
 
@@ -369,7 +369,7 @@ function showWinner(winner) {
 
       localStorage.setItem("playergames",playergames+1);
       localStorage.setItem("botgames",botgames+1);
-      
+
     }
   }
 
@@ -381,7 +381,7 @@ function showWinner(winner) {
       localStorage.setItem("botwins",botwins+1);
       localStorage.setItem("botgames",botgames+1);
       localStorage.setItem("playergames",playergames+1);
-      
+
     }
   }
 
@@ -463,18 +463,18 @@ function startGame() {
     }
 
     console.log("Offline game started");
-  
+
     var gameBoard = initGame();
-  
+
     drawBoard(gameBoard);
-  
+
     if (document.getElementById("first").checked == false) {
       bot_play(gameBoard);
     }
     else {
       printPlayer(user.username);
     }
- 
+
   }
 
 }
@@ -727,7 +727,7 @@ function play(col, gameBoard) {
           showWinner(user.username);
           return;
         }
-  
+
         console.log("oponnet play");
         printPlayer(bot);
         close_input();
@@ -735,7 +735,7 @@ function play(col, gameBoard) {
         return;
       }
     }
-  
+
     gameBoard[col][game.boardHeight-1] = user.username;
     drawBoard(gameBoard);
 
@@ -743,13 +743,13 @@ function play(col, gameBoard) {
       showWinner(user.username);
       return;
     }
-  
+
     console.log("oponnet play");
     printPlayer(bot);
     close_input();
     setTimeout(function() {bot_play(gameBoard)} ,2000);
     return;
-    
+
   }
 
 }
@@ -1009,7 +1009,7 @@ function printPlayer(player) {
     var ptext = document.createElement("p");
     var text = document.createTextNode("Sua Vez");
     ptext.id = "activePlayer";
-    
+
     outside_div.appendChild(color_div);
     color_div.appendChild(ptext);
     ptext.appendChild(text);
@@ -1019,7 +1019,7 @@ function printPlayer(player) {
   else {
 
     console.log("Opponents Turn");
-    
+
     deletePlayer();
 
     var outside_div = document.getElementById("player");
@@ -1034,7 +1034,7 @@ function printPlayer(player) {
     outside_div.appendChild(color_div);
     color_div.appendChild(ptext);
     ptext.appendChild(text);
-   
+
   }
 
   console.log("Finished printing current player");
@@ -1162,7 +1162,7 @@ function checkToggle() {
   online = false;
 
   if (document.getElementById("vs_pc").checked == true) {
-    
+
     let keepspace = document.getElementById("keepSpace");
 
     let offon1 = document.createElement("div");
@@ -1267,4 +1267,3 @@ function checkToggle() {
   }
 
 }
-
