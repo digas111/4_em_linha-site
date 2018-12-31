@@ -32,7 +32,7 @@ h3 {
   right: 0em;
   left: 0em;
   text-align: center;
-  background-color: #162a72;
+  background-color: #8B0000;
 }
 
 #top_bar_wrapper {
@@ -46,7 +46,7 @@ h3 {
   margin-left: -50vw;
   left:50%;
   display: inline-block;
-  background-color: #0d193b;
+  background-color: #231401;
 }
 
 #container {
@@ -61,8 +61,8 @@ h3 {
     /* background-color: #e3e4e5; */
     background:
     /* top, transparent red, faked with gradient */
-    linear-gradient(to bottom right, #0d193b, rgba(255, 255, 255, 0)),
-    url("https://wallpapercave.com/wp/KumM10p.jpg");
+    /* linear-gradient(to bottom right, #0d193b, rgba(255, 255, 255, 0)), */
+    url("http://www.novavox.it/wp-content/uploads/2018/12/capodanno-sfondo-1.jpg");
   /* background-image: url("https://wallpapercave.com/wp/KumM10p.jpg"); */
   background-repeat: no-repeat, repeat;
   background-size: cover;
@@ -152,7 +152,7 @@ h3 {
   width: 75%;
   padding-bottom: 75%;
   /* float: left; */
-  background-image: url("img/snowflake.png");
+  background-image: url("img/balloons.png");
   background-repeat: no-repeat, repeat;
   background-size: cover;
   background-position: center;
@@ -164,7 +164,7 @@ h3 {
   width: 75%;
   padding-bottom: 75%;
   /* float: left; */
-  background-image: url("img/santa-hat.png");
+  background-image: url("img/2019.png");
   background-repeat: no-repeat, repeat;
   background-size: cover;
   background-position: center;
@@ -175,7 +175,7 @@ html, body {
   height: 99%;
   width: 100%;
   overflow: hidden;
-  background-color: #0d193b;
+  background-color: #231401;
 }
 
 .tooltiptext {

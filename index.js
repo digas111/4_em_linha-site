@@ -16,7 +16,7 @@ function toggleSnow() {
   let makecanv = document.createElement("canvas");
   makecanv.id = "canv";
   background.appendChild(makecanv);
-  
+
   var c = document.getElementById('canv'),
   $ = c.getContext("2d");
 var w = c.width = window.innerWidth,
@@ -25,7 +25,7 @@ var w = c.width = window.innerWidth,
 Snowy();
 function Snowy() {
 var snow, arr = [];
-var num = 600, tsc = 1, sp = 1;
+var num = 200, tsc = 1, sp = 1;
 var sc = 1.3, t = 0, mv = 20, min = 1;
   for (var i = 0; i < num; ++i) {
     snow = new Flake();
