@@ -42,7 +42,7 @@ module.exports.joinGame = function (nick, size) {
 }
 
 function stopWait(gameId) {
-  console.log("timeout");
+  //console.log("timeout");
   for (let i = 0; i < games.length; i++) {
     if (games[i].gameId == gameId) {
       if (games[i].nick2 == null) {
@@ -93,7 +93,7 @@ module.exports.leaveGame = function(gameId, nick) {
           var winner = games[i].nick1;
           var winner = games[i].nick2;
         }
-        saveScoreVictory(winner, loser, games[i].size);
+        saveScoreVictory(winner, loser, games[i].size.columns);
       }
       update(JSON.stringify({winner: winner}), game[i].response1, games[i].response2);
 
@@ -114,7 +114,7 @@ module.exports.leaveGame = function(gameId, nick) {
 
 module.exports.notify = function(nick, pass, gameId, column) {
 
-  console.log("begin notify");
+  //console.log("begin notify");
 
   for (let i=0; i<games.length; i++) {
     if (games[i].gameId == gameId && games[i].active == true) {
@@ -158,7 +158,7 @@ module.exports.notify = function(nick, pass, gameId, column) {
         games[i].response1.end();
         games[i].response2.end();
 
-        saveScoreTie(games[i].nick1, games[i].nick2, size);
+        saveScoreTie(games[i].nick1, games[i].nick2, games[i].size.columns);
       }
 
       else {
@@ -180,7 +180,7 @@ module.exports.notify = function(nick, pass, gameId, column) {
     }
   }
 
-  console.log("end notify");
+  //console.log("end notify");
 
 }
 
@@ -351,14 +351,14 @@ function saveScoreTie(player1, player2, size) {
 
       police++;
 
-      if (data[i]["games"][[size.columns][size.rows]] == null) {
-        data[i]["games"][[size.columns][size.rows]] = {};
-        data[i]["games"][[size.columns][size.rows]]["games"] = 1;
-        data[i]["games"][[size.columns][size.rows]]["victories"] = 0;
+      if (data[i]["games"][size] == null) {
+        data[i]["games"][size] = {};
+        data[i]["games"][size]["games"] = 1;
+        data[i]["games"][size]["victories"] = 0;
       }
 
       else {
-        data[i]["games"][[size.columns][size.rows]]["games"]++;
+        data[i]["games"][size]["games"]++;
       }
 
     }
@@ -368,7 +368,7 @@ function saveScoreTie(player1, player2, size) {
   data = {users: data};
 
   try {
-    fs.writeFileSync(saveFile, JSON.stringify(fileData));
+    fs.writeFileSync(saveFile, JSON.stringify(data));
   }
   catch(error) {
     console.log(error);
@@ -396,18 +396,18 @@ function saveScoreVictory(winner, loser, size) {
 
       police++;
 
-      if (data[i]["games"][[size.columns][size.rows]] == null) {
-        data[i]["games"][[size.columns][size.rows]] = {};
-        data[i]["games"][[size.columns][size.rows]]["games"] = 1;
-        data[i]["games"][[size.columns][size.rows]]["victories"] = 0;
+      if (data[i]["games"][size] == null) {
+        data[i]["games"][size] = {};
+        data[i]["games"][size]["games"] = 1;
+        data[i]["games"][size]["victories"] = 0;
       }
       else {
-        data[i]["games"][[size.columns][size.rows]]["games"]++;
+        data[i]["games"][size]["games"]++;
       }
     }
 
     if (data[i]["nick"] == winner) {
-      data[i]["games"][[size.columns][size.rows]]["victories"]++;
+      data[i]["games"][size]["victories"]++;
     }
 
   }

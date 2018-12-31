@@ -48,7 +48,7 @@ module.exports.getRequest = function (request, response) {
 
 module.exports.postRequest = function (request, response) {
 
-  console.log("post");
+  //console.log("post");
 
   const parsedUrl = url.parse(request.url, true);
   const pathname = parsedUrl.pathname;
@@ -74,7 +74,7 @@ module.exports.postRequest = function (request, response) {
     switch (pathname) {
       case "/register":
 
-        console.log("register");
+        //console.log("register");
 
         let borderpassresult = borderpass(query["nick"], query["pass"]);
 
@@ -84,7 +84,7 @@ module.exports.postRequest = function (request, response) {
             break;
           default:
             responseWriter(response, 200, {});
-            console.log("login done");
+            //console.log("login done");
             break;
         }
         break;
@@ -112,11 +112,15 @@ module.exports.postRequest = function (request, response) {
 
         var rank = [];
 
+        //console.log("boas");
+        //console.log(query["size"]["columns"]);
+
         for (var i = 0; i < data.length; i++) {
-          if (data[i]["games"][query["size"]] != null) {
-            rank.push({ nick: fileData[i]["nick"], 
-            victories: data[i]["games"][[size.columns][size.rows]]["victories"], 
-            games: data[i]["games"][[size.columns][size.rows]]["games"] });
+          if (data[i]["games"][query["size"]["columns"]] != null) {
+            //console.log(data[i]["games"][query["size"]["victories"]);
+            rank.push({ nick: data[i]["nick"], 
+            victories: data[i]["games"][query["size"]["columns"]]["victories"], 
+            games: data[i]["games"][query["size"]["columns"]]["games"] });
           }
         }
 
@@ -132,7 +136,7 @@ module.exports.postRequest = function (request, response) {
 
         rank = rank.slice(0,10);
 
-        rank = { ranking: rank };
+        rank = {ranking: rank};
 
         responseWriter(response, 200, rank);
         break;
@@ -196,7 +200,7 @@ function borderpass(nick, pass) {
     return 401;
   }
 
-  const hash = crypto
+  pass = crypto
     .createHash('md5')
     .update(pass)
     .digest('hex');
@@ -209,8 +213,6 @@ function borderpass(nick, pass) {
     console.log("Error reading user save");
     return 500;
   }
-
-  var police = false;
 
   for (let i = 0; i < file.length; i++) {
     if (file[i]['nick'] == nick) {
