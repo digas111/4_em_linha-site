@@ -2,13 +2,14 @@
 
 //global variables
 
-const saveFile = "Saves/users.json"
+const saveFile = "server/Saves/users.json"
 
 var fs = require("fs");
 
 var games = [];
 
-//arranjar melhor nome para esta função  
+module.exports.documentRoot = '';
+
 module.exports.addGame = function (nick, size, gameId) {
 
   let board = initGame(size.columns, size.rows);
@@ -95,7 +96,7 @@ module.exports.leaveGame = function(gameId, nick) {
         }
         saveScoreVictory(winner, loser, games[i].size.columns);
       }
-      update(JSON.stringify({winner: winner}), game[i].response1, games[i].response2);
+      update(JSON.stringify({winner: winner}), games[i].response1, games[i].response2);
 
       if (games[i].response1 != null) {
         games[i].response1.end();
@@ -190,12 +191,12 @@ module.exports.connect = function(gameId, nick, response) {
     if (games[i].gameId = gameId) {
       if (games[i].nick1 == nick && games[i].response1 == null) {
         games[i].response1 = response;
-        response = writeResponse(response);
+        response = writeHeader(response);
         return 0;
       }
       else if (games[i].nick2 == nick && games[i].response2 == null) {
         games[i].response2 = response;
-        response = writeResponse(response);
+        response = writeHeader(response);
         games[i].active = true;
         games[i].turn = games[i].nick1;
         clearTimeout(games[i].timeout);
@@ -423,7 +424,7 @@ function saveScoreVictory(winner, loser, size) {
 
 }
 
-function writeResponse(response) {
+function writeHeader(response) {
   response.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',

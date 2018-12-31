@@ -21,7 +21,7 @@ var game = new Game(0,0,null,61,null,null);
 var gameActive = false; //know if the game is active
 var activePlayer = 1; //know who is playing
 
-var server = 'http://127.0.0.1:8161/';
+var server = 'http://twserver.alunos.dcc.fc.up.pt:8161/';
 
 function User(username,password, board_type, group) {
   this.username = username;
@@ -216,6 +216,8 @@ function update() {
         }
 
       }
+
+      
 
       showWinner(data.winner);
 
@@ -1267,3 +1269,9 @@ function checkToggle() {
   }
 
 }
+
+
+
+
+
+
