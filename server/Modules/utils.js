@@ -2,7 +2,7 @@
 
 //global variables
 
-const saveFile = "server/Saves/users.json"
+const saveFile = "./server/Saves/users.json"
 
 var fs = require("fs");
 
@@ -185,29 +185,27 @@ module.exports.notify = function(nick, pass, gameId, column) {
 
 }
 
-module.exports.connect = function(gameId, nick, response) {
+module.exports.connect = function(gameId, nick) {
 
   for (let i=0; i<games.length; i++) {
     if (games[i].gameId = gameId) {
       if (games[i].nick1 == nick && games[i].response1 == null) {
         games[i].response1 = response;
-        response = writeHeader(response);
-        return 0;
+        return 200;
       }
       else if (games[i].nick2 == nick && games[i].response2 == null) {
         games[i].response2 = response;
-        response = writeHeader(response);
         games[i].active = true;
         games[i].turn = games[i].nick1;
         clearTimeout(games[i].timeout);
         update(JSON.stringify({turn: games[i].turn, board: games[i].board}), games[i].response1, games[i].response2);
-        return 0;
+        return 200;
       }
       break;
     }
     
   }
-  return 1;
+  return 400;
 }
 
 
