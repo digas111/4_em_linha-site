@@ -4,6 +4,8 @@ const url = require('url');
 const crypto = require('crypto');
 const fs = require('fs');
 
+const utils = require('./utils.js')
+
 const maxResponseRanking = 10; //numero maximo de linhas na tabela de classificações
 
 module.exports.getRequest = function (request, response) {
@@ -14,159 +16,179 @@ module.exports.getRequest = function (request, response) {
   let body = '';
 
   request
-    .on('data', (chunk) => { body += chunk;  })
-    .on("end", function() {
+    .on('data', (chunk) => { body += chunk; })
+    .on("end", function () {
       if (pathname == "/update") {
 
-        if (borderpass(nick,pass) != 200) {
+        if (borderpass(query["nick"], query["pass"]) != 200) {
           //retornar erro
         }
 
-        let resultUpdate = utils.connect(query["game"], query["nick"], reponse);
+        let resultUpdate = utils.connect(query["game"], query["nick"], response);
 
         if (resultUpdate == 400) {
-          response.writeHead(400, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({error: "Invalid game reference"})); //verificar erro
-          response.end();
+          responseWriter(response, 400, { error: "Invalid game reference" });
         }
 
 
       }
       else {
-        response.writeHead(404, { 'Content-Type': 'text/plain' });
-        response.end();
+        responseWriter(response, 404, {});
+
       }
     })
-    .on("close", function(){
-      reponse.end();
-    })
-    .on("error", function(error){
-      console.log(error.message);
-      response.writeHead(400, { 'Content-Type': 'text/plain' });
+    .on("close", function (error) {
       response.end();
+    })
+    .on("error", function (error) {
+      console.log(error.message);
+      responseWriter(response, 400, {});
     });
 }
 
 module.exports.postRequest = function (request, response) {
 
+  console.log("post");
+
   const parsedUrl = url.parse(request.url, true);
   const pathname = parsedUrl.pathname;
+  var body = "";
+
+	request.on("data", function(chunk){
+		body += chunk;
+	});
 
   request.on("end", function () {
+
+    try{
+			var query = JSON.parse(body);
+		}
+		catch(err){
+			console.log(err.message);
+			response.writeHead(400, headers["plain"]);
+			response.write(JSON.stringify({error: "Error parsing JSON request: " + err}));
+			response.end();
+			return;
+		}
 
     switch (pathname) {
       case "/register":
 
-        let borderpassresult = borderpass(query["nick"], query["pass"]);
+        console.log("register");
 
-        response.writeHead(borderpassresult, { 'Content-Type': 'text/plain' });
+        let borderpassresult = borderpass(query["nick"], query["pass"]);
 
         switch (borderpassresult) {
           case 401:
-            response.write(JSON.stringify({ error: "User registerd with a different password" }));
+            responseWriter(response, 401, { error: "User registerd with a different password" });
             break;
           default:
-            response.write(JSON.stringify({}));
+            responseWriter(response, 200, {});
+            console.log("login done");
+            break;
         }
-        response.end();
         break;
-      case '/ranking':
-        if(query['size']==null) {
-          response.writeHead(400, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({ error: "Undefined size" }));
-          response.end();
-        }
-        else if (!Number.isInteger(parseInt(query["size"]))){
-          response.writeHead(400, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({ error: "Invalid size" }));
-          response.end();
-        }
         
+      case '/ranking':
+
+        if (query['size'] == null) {
+          responseWriter(response, 400, { error: "Undefined size" });
+        }
+        else if (!Number.isInteger(parseInt(query["size"].rows))) {
+          responseWriter(response, 400, { error: "Invalid size" });
+        }
+
         try {
           var data = fs.readFileSync("Saves/users.json");
           data = JSON.parse(data.toString())["users"];
         }
-        catch(error) {
+        catch (error) {
           console.log(error);
-          response.writeHead(500, { 'Content-Type': 'text/plain' });
-          response.end();
+          responseWriter(response, 500, {});
+
           //add new error type for read file
           break;
         }
 
         var rank = [];
 
-        for (var i=0; i<data.length && i< maxResponseRanking; i++) {
+        for (var i = 0; i < data.length; i++) {
           if (data[i]["games"][query["size"]] != null) {
-            rank.push({nick: fileData[i]["nick"], victories: data[i]["games"][query["size"]]["victories"], games: data[i]["games"][query["size"]]["games"]});
+            rank.push({ nick: fileData[i]["nick"], 
+            victories: data[i]["games"][[size.columns][size.rows]]["victories"], 
+            games: data[i]["games"][[size.columns][size.rows]]["games"] });
           }
         }
 
+        for (i = 0; i<rank.length; i++) {
+          for (var j=0; j<rank.length; j++) {
+            if (rank[j]["victories"] > rank[i]["victories"]) {
+              let aux = rank[i];
+              rank[i] = rank[j];
+              rank[j] = aux;
+            }
+          }
+        }
 
-        rank = {ranking: rank};
+        rank = rank.slice(0,10);
 
-        response.writeHead(200, { 'Content-Type': 'text/plain' });
-        response.write(JSON.stringify(rank));
-        response.end();
-      break;
+        rank = { ranking: rank };
+
+        responseWriter(response, 200, rank);
+        break;
       case "/join":
-        var gameID = utils.joinGame(query["nick"],query["size"]);
+        var gameID = utils.joinGame(query["nick"], query["size"]);
 
-        if (gameID!=null) {
-          response.writeHead(200, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({game: gameID}));
-          response.end();
+        if (gameID != null) {
+          responseWriter(response, 200, { game: gameID });
         }
 
         else {
           var date = new Date();
           date = date.getTime();
           var gameID = crypto
-              .createHash('md5')
-              .update(date.toString())
-              .digest('hex');
+            .createHash('md5')
+            .update(date.toString())
+            .digest('hex');
 
           utils.addGame(query["nick"], query["size"], gameID);
-          response.writeHead(200, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({game: gameID}));
-          response.end();
+          responseWriter(response, 200, { game: gameID });
+
         }
-      break;
+        break;
 
       case "/leave":
         let resultLeave = utils.leaveGame(query["game"], query["nick"]);
 
-        response.writeHead(200, { 'Content-Type': 'text/plain' });
-        response.write(JSON.stringify({}));
-        response.end();
-      break;
+        responseWriter(response, 200, {});
+
+        break;
 
       case "/notify":
-        let resultNotify = utils.notify(query["game"], query["nick"], query["column"]);
+        
+        var resultNotify = utils.notify(query["nick"], query["pass"], query["game"], query["column"]);
 
-        if (resultNotify == "turn") {
-          response.writeHead(400, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({"error": "Not your turn to play"}));
-          response.end();
+        if (resultNotify === "turn") {
+          responseWriter(response, 400, { "error": "Not your turn to play" });
+
         }
 
-        else if (resultNotify == "negative_column") {
-          response.writeHead(400, { 'Content-Type': 'text/plain' });
-          response.write(JSON.stringify({"error": "Column reference is negative"}));
-          response.end();
+        else if (resultNotify === "negative_column") {
+          responseWriter(response, 400, { "error": "Column reference is negative" });
+
         }
-      break;
+        else if (resultNotify === "ok") {
+          responseWriter(response, 200, {});
+        }
+        break;
 
       default:
-        response.writeHead(404, { 'Content-Type': 'text/plain' });
-        response.end();
+        responseWriter(response, 404, {});
 
     }
 
   });
 }
-
-
 
 function borderpass(nick, pass) {
 
@@ -192,31 +214,37 @@ function borderpass(nick, pass) {
 
   for (let i = 0; i < file.length; i++) {
     if (file[i]['nick'] == nick) {
-      police = true;
-      break;
+
+      if (file[i]["pass"] == pass) {
+        return 200;
+      }
+
+      else {
+        return 401;
+      }
     }
   }
 
-  if (police == false) {
+  file.push({ nick: nick, pass: pass, games:{size:{}}});
+  file = { users: file };
 
-    file.push({ nick: nick, pass: pass });
-    file = { users: file };
-
-    try {
-      fs.writeFileSync("Saves/users.json", JSON.stringify(file));
-    }
-    catch (error) {
-      console.log("Error writting user save");
-      return 500;
-    }
+  try {
+    fs.writeFileSync("Saves/users.json", JSON.stringify(file));
   }
 
-  else {
-    if (file[i]["pass"] == pass) {
-      return 200;
-    }
-    else {
-      return 401;
-    }
+  catch (error) {
+    console.log("Error writting user save");
+    return 500;
   }
+
+}
+
+function responseWriter(response, code, jsonObj) {
+  response.writeHead(code, {
+		'Content-Type': 'application/javascript',
+		'Cache-Control': 'no-cache',
+		'Access-Control-Allow-Origin': '*'
+  });
+  response.write(JSON.stringify(jsonObj));
+  response.end();
 }

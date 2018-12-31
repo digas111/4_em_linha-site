@@ -42,6 +42,7 @@ module.exports.joinGame = function (nick, size) {
 }
 
 function stopWait(gameId) {
+  console.log("timeout");
   for (let i = 0; i < games.length; i++) {
     if (games[i].gameId == gameId) {
       if (games[i].nick2 == null) {
@@ -85,12 +86,12 @@ module.exports.leaveGame = function(gameId, nick) {
       }
       else {
         if (games[i].nick1 == nick) {
-          var winner = nick2;
-          var loser = nick1;
+          var winner = games[i].nick2;
+          var loser = games[i].nick1;
         }
         else {
-          var winner = nick1;
-          var winner = nick2;
+          var winner = games[i].nick1;
+          var winner = games[i].nick2;
         }
         saveScoreVictory(winner, loser, games[i].size);
       }
@@ -111,19 +112,18 @@ module.exports.leaveGame = function(gameId, nick) {
 
 }
 
-module.exports.play = function(gameId, nick, board, column) {
+module.exports.notify = function(nick, pass, gameId, column) {
+
+  console.log("begin notify");
 
   for (let i=0; i<games.length; i++) {
     if (games[i].gameId == gameId && games[i].active == true) {
       clearTimeout(games[i].timeout);
       if (games[i].turn != nick) {
-        throw 'Not your turn to play';
+        return "turn";
       }
       else if (column < 0 || column >= games[i].size.columns) {
-        throw 'Not in board scope';
-      }
-      else if (boardIsFull) {
-        throw 'Board is full';
+        return "negative_column";
       }
 
       let police = false;
@@ -141,10 +141,10 @@ module.exports.play = function(gameId, nick, board, column) {
 
       }
 
-      if (winner(games[i].board, nick)) {
-        update(JSON.stringify({winner: nick, board: games[i].board, column: colum}), games[i].response1, games[i].response2);
+      if (winner(games[i].board,games[i].size, nick)) {
+        update(JSON.stringify({winner: nick, board: games[i].board, column: column}), games[i].response1, games[i].response2);
         games[i].response1.end();
-        games[i].response2.emd();
+        games[i].response2.end();
         if (games[i].nick1 == nick) {
           saveScoreVictory(nick, games[i].nick2, games[i].board.length);
         }
@@ -171,13 +171,17 @@ module.exports.play = function(gameId, nick, board, column) {
           games[i].turn = games[i].nick1;
         }
 
-        game[i].timeout = setTimeout(function() {stopWait(gameId)}, 120000);
+        games[i].timeout = setTimeout(function() {stopWait(gameId)}, 120000);
 
         update(JSON.stringify({turn: games[i].turn, board: games[i].board, colum: column}), games[i].response1, games[i].response2);
 
       }
+      return "ok";
     }
   }
+
+  console.log("end notify");
+
 }
 
 module.exports.connect = function(gameId, nick, response) {
@@ -185,7 +189,7 @@ module.exports.connect = function(gameId, nick, response) {
   for (let i=0; i<games.length; i++) {
     if (games[i].gameId = gameId) {
       if (games[i].nick1 == nick && games[i].response1 == null) {
-        game[i].response1 = response;
+        games[i].response1 = response;
         response = writeResponse(response);
         return 0;
       }
@@ -194,6 +198,7 @@ module.exports.connect = function(gameId, nick, response) {
         response = writeResponse(response);
         games[i].active = true;
         games[i].turn = games[i].nick1;
+        clearTimeout(games[i].timeout);
         update(JSON.stringify({turn: games[i].turn, board: games[i].board}), games[i].response1, games[i].response2);
         return 0;
       }
@@ -244,14 +249,14 @@ function boardIsFull(board) {
   return true;
 }
 
-function winner(tempBoard,player) {
+function winner(tempBoard,size,player) {
 
   //check vertical
 
   var counter = 0;
 
-  for (var i = 0; i < game.boardWidth; i++) {
-    for (var j = 0; j < game.boardHeight; j++) {
+  for (var i = 0; i < size.columns; i++) {
+    for (var j = 0; j < size.rows; j++) {
       if (tempBoard[i][j] == player) {
         counter++;
       }
@@ -268,8 +273,8 @@ function winner(tempBoard,player) {
   counter = 0;
   //check horizontal
 
-  for (var j = 0; j < game.boardHeight; j++) {
-    for (var i = 0; i < game.boardWidth; i++) {
+  for (var j = 0; j < size.rows; j++) {
+    for (var i = 0; i < size.columns; i++) {
       if (tempBoard[i][j] == player) {
         counter++;
       }
@@ -286,8 +291,8 @@ function winner(tempBoard,player) {
   counter = 0;
   //check diagonal left-to-right
 
-  for (var i = 0; i < game.boardHeight - 3; i++) {
-    for (var j = 0; j < game.boardWidth - 3; j++) {
+  for (var i = 0; i < size.rows - 3; i++) {
+    for (var j = 0; j < size.columns - 3; j++) {
       for (var t = 0; t < 4; t++) {
         if (tempBoard[i + t][j + t] == player) {
           counter++;
@@ -308,8 +313,8 @@ function winner(tempBoard,player) {
 
   //check diagonal right-to-left
 
-  for (var i = game.boardWidth - 1; i > 2; i--) {
-    for (var j = 0; j < game.boardWidth - 3; j++) {
+  for (var i = size.rows - 1; i > 2; i--) {
+    for (var j = 0; j < size.columns - 3; j++) {
       for (var t = 0; t < 4; t++) {
         if (tempBoard[i - t][j + t] == player) {
           counter++;
@@ -346,14 +351,14 @@ function saveScoreTie(player1, player2, size) {
 
       police++;
 
-      if (data[i]["games"][size] == null) {
-        data[i]["games"][size] = {};
-        data[i]["games"][size]["games"] = 1;
-        data[i]["games"][size]["victories"] = 0;
+      if (data[i]["games"][[size.columns][size.rows]] == null) {
+        data[i]["games"][[size.columns][size.rows]] = {};
+        data[i]["games"][[size.columns][size.rows]]["games"] = 1;
+        data[i]["games"][[size.columns][size.rows]]["victories"] = 0;
       }
 
       else {
-        data[i]["games"][size]["games"]++;
+        data[i]["games"][[size.columns][size.rows]]["games"]++;
       }
 
     }
@@ -391,18 +396,18 @@ function saveScoreVictory(winner, loser, size) {
 
       police++;
 
-      if (data[i]["games"][size] == null) {
-        data[i]["games"][size] = {};
-        data[i]["games"][size]["games"] = 1;
-        data[i]["games"][size]["victories"] = 0;
+      if (data[i]["games"][[size.columns][size.rows]] == null) {
+        data[i]["games"][[size.columns][size.rows]] = {};
+        data[i]["games"][[size.columns][size.rows]]["games"] = 1;
+        data[i]["games"][[size.columns][size.rows]]["victories"] = 0;
       }
       else {
-        data[i]["games"][size]["games"]++;
+        data[i]["games"][[size.columns][size.rows]]["games"]++;
       }
     }
 
     if (data[i]["nick"] == winner) {
-      data[i]["games"][size]["victories"]++;
+      data[i]["games"][[size.columns][size.rows]]["victories"]++;
     }
 
   }
@@ -410,7 +415,7 @@ function saveScoreVictory(winner, loser, size) {
   data = {users: data};
 
   try {
-    fs.writeFileSync(saveFile, JSON.stringify(fileData));
+    fs.writeFileSync(saveFile, JSON.stringify(data));
   }
   catch(error) {
     console.log(error);
