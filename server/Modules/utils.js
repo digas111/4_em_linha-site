@@ -129,10 +129,11 @@ module.exports.notify = function(nick, pass, gameId, column) {
 
       let police = false;
 
-      for (let j=0; j<games[i].size.rows; j++) {
+      for (let j=0; j<games[i].size.rows-1; j++) {
         if (games[i].board[column][j+1] != null) {
           games[i].board[column][j] = nick;
           police = true;
+          break;
         }
       }
 
@@ -185,16 +186,28 @@ module.exports.notify = function(nick, pass, gameId, column) {
 
 }
 
-module.exports.connect = function(gameId, nick) {
+module.exports.connect = function(gameId, nick,response) {
 
   for (let i=0; i<games.length; i++) {
     if (games[i].gameId = gameId) {
       if (games[i].nick1 == nick && games[i].response1 == null) {
         games[i].response1 = response;
+        response.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Access-Control-Allow-Origin': '*',
+          'Connection': 'keep-alive'
+        });
         return 200;
       }
       else if (games[i].nick2 == nick && games[i].response2 == null) {
         games[i].response2 = response;
+        response.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Access-Control-Allow-Origin': '*',
+          'Connection': 'keep-alive'
+        });
         games[i].active = true;
         games[i].turn = games[i].nick1;
         clearTimeout(games[i].timeout);
@@ -420,16 +433,6 @@ function saveScoreVictory(winner, loser, size) {
     console.log(error);
   }
 
-}
-
-function writeHeader(response) {
-  response.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Access-Control-Allow-Origin': '*',
-    'Connection': 'keep-alive'
-  });
-  return response;
 }
 
 function areSameSize(size1,size2) {

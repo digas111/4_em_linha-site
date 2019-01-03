@@ -24,14 +24,16 @@ module.exports.getRequest = function (request, response) {
             //retornar erro
           }
 
-          let resultUpdate = utils.connect(query["game"], query["nick"]);
+          let resultUpdate = utils.connect(query["game"], query["nick"],response);
 
-          if (resultUpdate == 200) {
-            responseWriter(response, 200, 'plain', JSON.stringify({}));
-          }
-
-          else if (resultUpdate == 400) {
-            responseWriter(response, 400, 'plain', JSON.stringify({ error: "Invalid game reference" }));
+          if (resultUpdate == 400) {
+            response.writeHead(400, {
+              'Content-Type': 'text/event-stream',
+              'Cache-Control': 'no-cache',
+              'Access-Control-Allow-Origin': '*',
+              'Connection': 'keep-alive'
+            });
+            response.write(JSON.stringify({ error: "Invalid game reference" }));
           }
           break;
         case '/':
@@ -284,7 +286,7 @@ function borderpass(nick, pass) {
     .digest('hex');
 
   try {
-    var file = fs.readFileSync(".server/Saves/users.json");
+    var file = fs.readFileSync("./server/Saves/users.json");
     file = JSON.parse(file.toString())["users"];
   }
   catch (error) {
